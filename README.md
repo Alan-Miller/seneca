@@ -15,4 +15,10 @@
     const seneca = require('seneca')();
     ```
 
-## Have 
+## Let your services talk
+
+#### add() method
+The add() method may remind you of building endpoints. With the add() method, we create a pattern to listen for, similar to the idea of writing endpoint URLs to listen for. We also pass in a callback that accepts the incoming request object as well as a done function.
+
+#### act() method
+If the add() methods reminds you of endpoints, the act() method may remind you of making requests to those endpoints. The act() method also takes an object and a callback.
