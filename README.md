@@ -16,7 +16,7 @@
     ```
 
 ## Configure your instance
-A config object can be passed into the Seneca instance when it is invoked. In our example, an object is passed in like this: ```seneca = require('seneca')({ log: 'silent' });```. Setting the ```log``` property to "silent" suppresses Seneca's default logs that appear in the console. For more options, including configuration options for debugging and testing, see the [docs at senecajs.org/api/](http://senecajs.org/api/).
+A config object can be passed into the Seneca instance when it is invoked. In our example, an object is passed in like this: ```seneca = require('seneca')({ log: 'silent' });```. Setting the ```log``` property to "silent" suppresses Seneca's default logs that appear in the console. For more options, including configuration options for debugging and testing, see the [Seneca docs at senecajs.org/api/](http://senecajs.org/api/).
 
 ## Let your services talk
 
