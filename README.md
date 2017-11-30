@@ -39,7 +39,7 @@ The ```add()``` method may remind you of building endpoints. With the ```add()``
 - The callback's second parameter defines a variable for our ```done()``` function. We call this function at the end of our ```add()``` block. The ```done()``` function accepts parameters for an error and for the response you send back. In our example above, we have a variable called ```average``` which stores a price average. This value is the result of logic our service performed on an incoming message. At the end of the ```add()``` block, you will see we called ```done()``` and passed that ```average``` variable into the second parameter, sending it back (think of an endpoint calling ```res.send()```).
 
 
-#### act() method
+### act() method
 If the ```add()``` methods reminds you of endpoints, the ```act()``` method may remind you of making requests to those endpoints. The ```act()``` method also takes an object and a callback.
 
 ###### act() request object
