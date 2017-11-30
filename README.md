@@ -70,3 +70,13 @@ If the ```add()``` methods reminds you of endpoints, the ```act()``` method may 
 - The ```client()``` method starts a microservice client that sends a JSON message. 
 - A port number can be passed in. If none is passed in, the default port is 10101. As long as the port matches the port number of another service's ```listen()``` method, the two services can communicate.
 - In our ```server.js``` file, we assign port 9898 like this: ```seneca.client(9898);```.
+- Notice that the ```client()``` method appears in ```server.js```, the same file which sends a request with ```act()```.
+
+### listen()
+- The ```listen()``` method listens for messages from other services.
+- A port number can be passed in. If the port number was specified in the ```act()``` method, it should be specified here to match.
+- In our ```average.js``` file, we assign ort 9898 like this: ```seneca.listen(9898);```.
+- Notice that the ```listen()``` method appears in ```average.js```, the same file which listens for a request with ```add()```.
+
+## Putting Seneca together with Express
+Using Seneca with an Express app is surprisingly easy. Our ```server.js``` file shows a simple Express which also requires Seneca and specifies a port in the ```client()``` method. The front end is built in React and it uses the built-in```componentDidMount()``` function to send an http request as soon as the page loads. Our Express app has an endpoint which listens for the request and makes a call to a products API, afterward calling ```seneca.act()``` to store the API response (the array of products) in a request object that is sent to the ```average.js``` service. The ```average.js``` service performs its logic and sends back the average of all the prices, which is then placed on an object and sent back to the front end using the Express app's ```res.send()``` method.
