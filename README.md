@@ -6,8 +6,11 @@ h# Seneca
 - Seneca uses pattern matching with a few simple methods to sends data from one Seneca plugin to another. If you are familiar with endpoints and requests, Seneca should start to feel comfortable fairly quickly.
 
 ## Install and require
-- Run ```npm install seneca```.
+- Install ```seneca``` with ```npm install```.
+    ```sh
+    npm install seneca
+    ```
 - Require 'seneca' and invoke, storing the instance in a variable. For example:
-```js
-const seneca = require('seneca')();
-```
+    ```js
+    const seneca = require('seneca')();
+    ```
