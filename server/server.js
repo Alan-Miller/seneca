@@ -7,7 +7,7 @@ const express = require('express')
 
 app
     .use(bodyParser.json())
-    // .use((req, res, next) => { console.log(req.method, req.url); next(); })
+    .use((req, res, next) => { console.log(req.method, req.url); next(); })
     .get('/api/products', (req, res) => {
         console.log('server GO!')
         axios.get('https://practiceapi.devmountain.com/products')
