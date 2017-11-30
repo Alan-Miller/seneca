@@ -79,7 +79,18 @@ If the ```add()``` methods reminds you of endpoints, the ```act()``` method may 
 - Notice that the ```listen()``` method appears in ```average.js```, the same file which listens for a request with ```add()```.
 
 ## Putting Seneca together with Express
-Using Seneca with an Express app is surprisingly easy. Our ```server.js``` file shows a simple Express app. This app also requires Seneca and specifies a port in the ```client()``` method. Then we just put our Seneca logic inside an Express endpoint function.
+Using Seneca with an Express app is surprisingly easy. Our ```server.js``` file shows a simple Express app. This app also requires Seneca and specifies a port in the ```client()``` method. Then we just put our Seneca logic inside an Express endpoint function. See our example from ```server.js``` below.
 1. The front end is built in React and it uses the built-in```componentDidMount()``` function to send an http request as soon as the page loads. 
 1. Our Express app has an endpoint which listens for the request and makes a call to a products API, afterward calling ```seneca.act()``` to store the API response (the array of products) in a request object that is sent to the ```average.js``` service. 
 1. The ```average.js``` service performs its logic and sends back the average of all the prices, which is then placed on an object and sent back to the front end using the Express app's ```res.send()``` method.
+```js
+app.get('/api/products', (req, res) => {
+    axios.get('https://practiceapi.devmountain.com/products')
+        .then(response => {
+            seneca.act({ "api": "products", "company": "DM", "data": response.data }, (err, avg) => {
+                return res.status(200).send({ products: response.data, average: avg.average });
+            });
+        })
+        .catch(err => console.log('ERROR:', err));
+});
+```
