@@ -17,16 +17,16 @@
 
 ## Let your services talk
 
-#### add() method
+### add() method
 The ```add()``` method may remind you of building endpoints. With the ```add()``` method, we create a pattern to listen for, similar to the idea of writing endpoint URLs to listen for. We also pass in a callback that accepts the incoming request object as well as a ```done()``` function.
 
-###### add() pattern 
+##### add() pattern 
 - The first parameter in our ```add()``` is a pattern object. Here is the example from the ```average.js``` file from this repo: ```{"api": "products", "company": "DM"}```. Though this README will continue to talk about the pattern as an object, keep in mind that it can also be written as a string: ```'api: products, company: DM'```.
 - This pattern can be _anything_. There is no magic to any of these properties except that you are creating a pattern to listen for.
 - Maybe you have multiple ```add()``` functions that share some parts of their patterns. An incoming message will always prioritize the most specific match. If there are two ```add()``` patterns with the same amount of specificity, the incoming message will hit the pattern that comes first alphabetically. For example, ```a: 1, b: 2, c: 3``` wins over ```a: 1, c: 3``` because it has more properties. ```a: 1, b: 2``` and ```a: 1, c: 3``` have the same number of properties, so ```a: 1, b: 2``` wins because it comes first alphabetically.
 
 
-###### add() callback
+##### add() callback
 - The callback's first parameter defines a variable that represents the incoming request object. We can pull data off that object and perform any kind of logic we need to within our service. Notice the example below from our ```average.js``` file. It calls the entire request object ```products``` and accesses the ```data``` property on it (which happens to store an array of product objects). The code performs the reduce() method on the array, averaging the all the values stored on the ```price``` property of each object. This average is stored in a variable called ```average```.
 
     ```js
@@ -42,7 +42,7 @@ The ```add()``` method may remind you of building endpoints. With the ```add()``
 ### act() method
 If the ```add()``` methods reminds you of endpoints, the ```act()``` method may remind you of making requests to those endpoints. The ```act()``` method also takes an object and a callback.
 
-###### act() request object
+##### act() request object
 - The first parameter in our ```act()``` is a request object. Here is the example from the ```server.js``` file from this repo: ```{"api": "products", "company": "DM", "data": response.data}```.
 - Notice this pattern has many of the same properties as the pattern object from our ```add()``` method. The message sent by ```act()``` will match up with our ```act()``` according to the priorities mentioned above: specificity first and alphabetical order second.
 - Although much is the same in the two objects, the ```act()``` object here has a ```data``` property on it, which happens to store an array of product objects (the same data mentioned earlier). There is no magic to the ```data``` property. It too could be called anything.
@@ -50,7 +50,7 @@ If the ```add()``` methods reminds you of endpoints, the ```act()``` method may 
     - To make another comparison to endpoints and HTTP requests, Seneca's ```act()``` method combines the pattern and the data into the same object kind of like how HTTP requests can have a URL and a query jammed together in the same string. Just like how an endpoint is not written to specifically to accept a query but can pull queries off of ```req.query```, our ```add()``` method is not written to match the ```data``` property but can still catch the incoming message (assuming it has priority under rules of specificity and alphabetic order), and it can then access that ```data``` value from the request object variable. Again, ```data``` could be called anything. 
     - Seneca simply match as many properties as possible, and we can pull data off any property on the object.
 
-###### act() callback
+##### act() callback
 - The callback's first parameter defines a variable for an error. In our example below, this is ```err```.
 
     ```js
