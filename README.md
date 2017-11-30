@@ -22,11 +22,8 @@ The add() method may remind you of building endpoints. With the add() method, we
 
 ###### add() pattern 
 
-- The first parameter in our add() is a pattern object. Here is the example from the average.js file from this repo:
-
-    ```js
-    {"api": "products", "company": "DM"}
-    ```
+- The first parameter in our add() is a pattern object. Here is the example from the average.js file from this repo: ```{"api": "products", "company": "DM"}```. Though this README will continue to talk about this pattern as an object, keep in mind that it can also be written as a string: ```'api: products, company: DM'```.
+- 
 
 #### act() method
 If the add() methods reminds you of endpoints, the act() method may remind you of making requests to those endpoints. The act() method also takes an object and a callback.
