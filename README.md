@@ -10,15 +10,18 @@
     ```sh
     npm install seneca
     ```
-1. In each Seneca service, require 'seneca' and invoke, storing the instance in a variable. For example:
+1. In each Seneca service, require 'seneca' and invoke it, storing the instance in a variable. For example:
     ```js
     const seneca = require('seneca')();
     ```
 
+## Configure your instance
+A config object can be passed into the Seneca instance when it is invoked. In our example, an object is passed in like this: ```seneca = require('seneca')({ log: 'silent' });```. Setting the ```log``` property to "silent" suppresses Seneca's default logs that appear in the console. For more options, including configuration options for debugging and testing, see the [docs at senecajs.org/api/](http://senecajs.org/api/).
+
 ## Let your services talk
 
-### add() method
-The ```add()``` method may remind you of building endpoints. With the ```add()``` method, we create a pattern to listen for, similar to the idea of writing endpoint URLs to listen for. We also pass in a callback that accepts the incoming request object as well as a ```done()``` function.
+### add()
+The ```add()``` method may remind you of building endpoints. With the ```add()``` method, we create a pattern to listen for, similar to the idea of writing endpoint URLs to listen for. We also pass in a callback that accepts the incoming request object as well as a ```done()``` function. The ```add()``` defines what we are listening for.
 
 ##### add() pattern 
 - The first parameter in our ```add()``` is a pattern object. Here is the example from the ```average.js``` file from this repo: ```{"api": "products", "company": "DM"}```. Though this README will continue to talk about the pattern as an object, keep in mind that it can also be written as a string: ```'api: products, company: DM'```.
@@ -39,8 +42,8 @@ The ```add()``` method may remind you of building endpoints. With the ```add()``
 - The callback's second parameter defines a variable for our ```done()``` function. We call this function at the end of our ```add()``` block. The ```done()``` function accepts parameters for an error and for the response you send back. In our example above, we have a variable called ```average``` which stores a price average. This value is the result of logic our service performed on an incoming message. At the end of the ```add()``` block, you will see we called ```done()``` and passed that ```average``` variable into the second parameter, sending it back (think of an endpoint calling ```res.send()```).
 
 
-### act() method
-If the ```add()``` methods reminds you of endpoints, the ```act()``` method may remind you of making requests to those endpoints. The ```act()``` method also takes an object and a callback.
+### act()
+If the ```add()``` methods reminds you of endpoints, the ```act()``` method may remind you of making requests to those endpoints. The ```act()``` method also takes an object and a callback. It is a function that executes when a pattern matches.
 
 ##### act() request object
 - The first parameter in our ```act()``` is a request object. Here is the example from the ```server.js``` file from this repo: ```{"api": "products", "company": "DM", "data": response.data}```.
@@ -62,3 +65,8 @@ If the ```add()``` methods reminds you of endpoints, the ```act()``` method may 
 - The callback's second parameter defines a variable for our the return data (i.e., what comes back after ```add()``` performs its logic and then calls ```done()```). 
     - In our example from ```server.js``` above, this is the ```avg``` variable, which stores the average of product prices that was determined by the logic in ```average.js```'s ```add()``` block. 
     - The logic inside the callback's block will be familiar to those of you who have built Express servers. Here, we call ```res.send()``` to send the original array of products to the front in the ```products``` property of an object, and we send the result of our ```average.js``` service's logic to the front on the ```average``` property of the object.
+
+### client()
+- The ```client()``` method starts a microservice client that sends a JSON message. 
+- A port number can be passed in. If none is passed in, the default port is 10101. As long as the port matches the port number of another service's ```listen()``` method, the two services can communicate.
+- In our ```server.js``` file, we assign port 9898 like this: ```seneca.client(9898);```.
