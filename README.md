@@ -21,7 +21,6 @@
 The ```add()``` method may remind you of building endpoints. With the ```add()``` method, we create a pattern to listen for, similar to the idea of writing endpoint URLs to listen for. We also pass in a callback that accepts the incoming request object as well as a ```done()``` function.
 
 ###### add() pattern 
-
 - The first parameter in our ```add()``` is a pattern object. Here is the example from the ```average.js``` file from this repo: ```{"api": "products", "company": "DM"}```. Though this README will continue to talk about the pattern as an object, keep in mind that it can also be written as a string: ```'api: products, company: DM'```.
 - This pattern can be _anything_. There is no magic to any of these properties except that you are creating a pattern to listen for.
 - Maybe you have multiple ```add()``` functions that share some parts of their patterns. An incoming message will always prioritize the most specific match. If there are two ```add()``` patterns with the same amount of specificity, the incoming message will hit the pattern that comes first alphabetically. For example, ```a: 1, b: 2, c: 3``` wins over ```a: 1, c: 3``` because it has more properties. ```a: 1, b: 2``` and ```a: 1, c: 3``` have the same number of properties, so ```a: 1, b: 2``` wins because it comes first alphabetically.
@@ -36,9 +35,30 @@ The ```add()``` method may remind you of building endpoints. With the ```add()``
         done(null, {average});
     });
     ```
-    
-- The callback's second parameter defines a variable for our ```done()``` function. We call this function at the end of our ```add()``` block. The ```done()``` function accepts parameters for an error and for the response you send back. In our example below, we have a variable called ```average``` which stores a price average. This value is the result of logic our service performed on an incoming message. At the end of the ```add()``` block, you will see we called ```done()``` and passed that ```average``` variable into the second parameter, sending it back (think of an endpoint calling ```res.send()```).
+
+- The callback's second parameter defines a variable for our ```done()``` function. We call this function at the end of our ```add()``` block. The ```done()``` function accepts parameters for an error and for the response you send back. In our example above, we have a variable called ```average``` which stores a price average. This value is the result of logic our service performed on an incoming message. At the end of the ```add()``` block, you will see we called ```done()``` and passed that ```average``` variable into the second parameter, sending it back (think of an endpoint calling ```res.send()```).
 
 
 #### act() method
 If the ```add()``` methods reminds you of endpoints, the ```act()``` method may remind you of making requests to those endpoints. The ```act()``` method also takes an object and a callback.
+
+###### act() request object
+- The first parameter in our ```act()``` is a request object. Here is the example from the ```server.js``` file from this repo: ```{"api": "products", "company": "DM", "data": response.data}```.
+- Notice this pattern has many of the same properties as the pattern object from our ```add()``` method. The message sent by ```act()``` will match up with our ```act()``` according to the priorities mentioned above: specificity first and alphabetical order second.
+- Although much is the same in the two objects, the ```act()``` object here has a ```data``` property on it, which happens to store an array of product objects (the same data mentioned earlier). There is no magic to the ```data``` property. It too could be called anything.
+- Are you wondering why the pattern to be matched and the data to be passed are in the same object? Interesting, right?
+    - To make another comparison to endpoints and HTTP requests, Seneca's ```act()``` method combines the pattern and the data into the same object kind of like how HTTP requests can have a URL and a query jammed together in the same string. Just like how an endpoint is not written to specifically to accept a query but can pull queries off of ```req.query```, our ```add()``` method is not written to match the ```data``` property but can still catch the incoming message (assuming it has priority under rules of specificity and alphabetic order), and it can then access that ```data``` value from the request object variable. Again, ```data``` could be called anything. 
+    - Seneca will simply match as many properties as possible, and we can pull data off any property on the ```act()``` object.
+
+###### act() callback
+- The callback's first parameter defines a variable for an error. In our example below, this is ```err```.
+
+    ```js
+    seneca.act({"api": "products", "company": "DM", "data": response.data}, (err, avg) => {
+        return res.status(200).send({products: response.data, average: avg.average});
+    });
+    ```
+
+- The callback's second parameter defines a variable for our the return data (i.e., what comes back after ```add()``` performs its logic and then calls ```done()```). 
+    - In our example from ```server.js``` above, this is the ```avg``` variable, which stores the average of product prices that was determined by the logic in ```average.js```'s ```add()``` block. 
+    - The logic inside the callback's block will be familiar to those of you who have built Express servers. Here, we call ```res.send()``` to send the original array of products to the front in the ```products``` property of an object, and we send the result of our ```average.js``` service's logic to the front on the ```average``` property of the object.
